@@ -197,6 +197,17 @@ fabric.properties
 *.tar.gz
 *.rar
 
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+*.orig
+.scannerwork
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 
 
