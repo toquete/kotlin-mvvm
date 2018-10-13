@@ -1,6 +1,5 @@
 package com.gtoquete.kotlinmvvm.presentation.editnote
 
-import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -13,13 +12,10 @@ import android.view.ViewGroup
 import com.gtoquete.kotlinmvvm.R
 import com.gtoquete.kotlinmvvm.databinding.FragmentEditNoteBinding
 import com.gtoquete.kotlinmvvm.infrastructure.ARGUMENT_NOTE
-import com.gtoquete.kotlinmvvm.presentation.main.MainViewModel
 
 class EditNoteFragment : Fragment() {
 
     private lateinit var binding: FragmentEditNoteBinding
-
-    private lateinit var viewModel : MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,9 +24,7 @@ class EditNoteFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_note, container, false)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.bind(activity?.intent?.getParcelableExtra(ARGUMENT_NOTE))
-        binding.viewModel = viewModel
+        binding.note = activity?.intent?.getParcelableExtra(ARGUMENT_NOTE)
         return binding.root
     }
 

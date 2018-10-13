@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import com.gtoquete.kotlinmvvm.R
 import com.gtoquete.kotlinmvvm.data.model.Note
 import com.gtoquete.kotlinmvvm.databinding.ItemNotesListBinding
+import com.gtoquete.kotlinmvvm.infrastructure.AdapterItemsContract
 
-class MainAdapter(private val notes: List<Note>,
-                  private val onCardClickListener: OnCardClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MainAdapter(private var notes: List<Note>,
+                  private val onCardClickListener: OnCardClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AdapterItemsContract {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = DataBindingUtil.inflate<ItemNotesListBinding>(
@@ -25,14 +26,17 @@ class MainAdapter(private val notes: List<Note>,
         (holder as BindingHolder).bind(notes[position], holder)
     }
 
+    override fun replaceItems(items: List<*>) {
+        this.notes = items as List<Note>
+        notifyDataSetChanged()
+    }
+
     inner class BindingHolder(private val binding: ItemNotesListBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private val viewModel = MainViewModel()
-
         fun bind(note: Note, viewHolder: RecyclerView.ViewHolder) {
-            viewModel.bind(note)
             binding.cardviewNote.setOnClickListener { onCardClickListener.onCardClick(notes[viewHolder.adapterPosition]) }
-            binding.viewModel = viewModel
+            binding.note = note
+            binding.executePendingBindings()
         }
     }
 

@@ -15,7 +15,6 @@ import com.gtoquete.kotlinmvvm.R
 import com.gtoquete.kotlinmvvm.data.model.Note
 import com.gtoquete.kotlinmvvm.databinding.FragmentMainBinding
 import com.gtoquete.kotlinmvvm.infrastructure.ARGUMENT_NOTE
-import com.gtoquete.kotlinmvvm.mock.NotesMockHelper
 import com.gtoquete.kotlinmvvm.presentation.editnote.EditNoteActivity
 
 /**
@@ -24,6 +23,8 @@ import com.gtoquete.kotlinmvvm.presentation.editnote.EditNoteActivity
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,14 +40,23 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerviewNotes.layoutManager = LinearLayoutManager(context)
-        binding.recyclerviewNotes.adapter = MainAdapter(NotesMockHelper.notesMockList, object : MainAdapter.OnCardClickListener {
-            override fun onCardClick(note: Note) {
-                goToEditScreen(note)
-            }
-        })
+        viewModel = MainViewModel()
+        binding.viewModel = viewModel
+        binding.apply {
+            recyclerviewNotes.layoutManager = LinearLayoutManager(context)
+            recyclerviewNotes.adapter = MainAdapter(emptyList(), object : MainAdapter.OnCardClickListener {
+                override fun onCardClick(note: Note) {
+                    goToEditScreen(note)
+                }
+            })
 
-        binding.fab.setOnClickListener { goToEditScreen(Note()) }
+            fab.setOnClickListener { goToEditScreen(Note()) }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.load()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
