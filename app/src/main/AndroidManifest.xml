@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".presentation.main.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,10 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.editnote.EditNoteActivity"
+        <activity android:name=".ui.editnote.EditNoteActivity"
             android:label="Editing the note"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".presentation.main.MainActivity"/>
+            android:parentActivityName=".ui.main.MainActivity"/>
     </application>
 
 </manifest>

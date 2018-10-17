@@ -1,4 +1,4 @@
-package com.gtoquete.kotlinmvvm.presentation.main
+package com.gtoquete.kotlinmvvm.ui.main
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity;

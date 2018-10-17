@@ -1,9 +1,9 @@
-package com.gtoquete.kotlinmvvm.presentation.main
+package com.gtoquete.kotlinmvvm.ui.main
 
 import android.content.Intent
 import android.databinding.DataBindingUtil
-import android.support.v4.app.Fragment
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.Menu
@@ -14,8 +14,9 @@ import android.view.ViewGroup
 import com.gtoquete.kotlinmvvm.R
 import com.gtoquete.kotlinmvvm.data.model.Note
 import com.gtoquete.kotlinmvvm.databinding.FragmentMainBinding
-import com.gtoquete.kotlinmvvm.infrastructure.ARGUMENT_NOTE
-import com.gtoquete.kotlinmvvm.presentation.editnote.EditNoteActivity
+import com.gtoquete.kotlinmvvm.infrastructure.ARGUMENT_NOTE_ID
+import com.gtoquete.kotlinmvvm.ui.editnote.EditNoteActivity
+import com.gtoquete.kotlinmvvm.viewmodel.MainViewModel
 
 /**
  * A placeholder fragment containing a simple view.
@@ -42,21 +43,12 @@ class MainFragment : Fragment() {
 
         viewModel = MainViewModel()
         binding.viewModel = viewModel
-        binding.apply {
-            recyclerviewNotes.layoutManager = LinearLayoutManager(context)
-            recyclerviewNotes.adapter = MainAdapter(emptyList(), object : MainAdapter.OnCardClickListener {
-                override fun onCardClick(note: Note) {
-                    goToEditScreen(note)
-                }
-            })
-
-            fab.setOnClickListener { goToEditScreen(Note()) }
-        }
+        binding.fab.setOnClickListener { goToAddEditNoteScreen() }
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel.load()
+        viewModel.load { showNotesList(it) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -71,10 +63,18 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun goToEditScreen(note: Note) {
+    private fun showNotesList(notesList: List<Note>) {
+        binding.apply {
+            recyclerviewNotes.layoutManager = LinearLayoutManager(context)
+            recyclerviewNotes.adapter = MainAdapter(context, notesList)
+        }
+    }
+
+    private fun goToAddEditNoteScreen() {
         Intent(context, EditNoteActivity::class.java).apply {
-            putExtra(ARGUMENT_NOTE, note)
+            putExtra(ARGUMENT_NOTE_ID, EditNoteActivity.REQUEST_CODE_NEW_NOTE)
             startActivity(this)
         }
     }
+
 }
